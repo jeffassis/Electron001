@@ -13,3 +13,10 @@ async function createWindow() {
 
 // ON READY 
 app.whenReady().then(createWindow)
+
+// ACTIVATE
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === o) {
+        createWindow()
+    }
+})
