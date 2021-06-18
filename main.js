@@ -7,8 +7,9 @@ async function createWindow() {
         width: 800,
         height: 600
     })
+    // CHAMADA DO HTML
+    await mainWindow.loadFile('src/pages/editor/index.html')
 }
 
 // ON READY 
 app.whenReady().then(createWindow)
-
