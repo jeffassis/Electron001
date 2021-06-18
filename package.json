@@ -1,0 +1,23 @@
+{
+  "name": "Electron001",
+  "version": "1.0.0",
+  "description": "Bloco de Anotações",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffassis/Electron001.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeffassis/Electron001/issues"
+  },
+  "homepage": "https://github.com/jeffassis/Electron001#readme",
+  "devDependencies": {
+    "electron": "^13.1.2"
+  }
+}
