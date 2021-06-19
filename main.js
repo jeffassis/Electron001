@@ -1,3 +1,5 @@
+const { Console } = require('console')
+const { FILE } = require('dns')
 const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron')
 const fs = require('fs')
 const path = require('path')
@@ -27,7 +29,7 @@ async function createWindow() {
 // ARQUIVO
 var file = {}
 
-// CRIAR NOVO ARQUIVO
+// SUBMENU CRIAR NOVO ARQUIVO
 function createNewFile() {
     file = {
         name: 'novo-arquivo.txt',
@@ -57,7 +59,7 @@ function writeFile(filePath) {
     }
 }
 
-// SALVAR COMO 
+// SUBMENU SALVAR COMO 
 async function saveFileAs() {
     // DIALOG 
     let dialogFile = await dialog.showSaveDialog({
@@ -72,6 +74,45 @@ async function saveFileAs() {
     writeFile(dialogFile.filePath)
 }
 
+// SUBMENU SALVAR ARQUIVO
+function saveFile() {
+    // VALOR VERDADEIRO -> SOBRESCREVE O CONTEUDO
+    if (file.saved) {
+        return writeFile(file.path)
+    }
+    // VALOR FALSO -> CHAMA O SALVAR COMO 
+    return saveFileAs()
+}
+
+// LER ARQUIVO
+function readFile(filePath) {
+    try {
+        return fs.readFileSync(filePath, 'utf8')
+    } catch (e) {
+        console.log(e)
+        return ''
+    }
+}
+
+// SUBMENU ABRIR ARQUIVO
+async function openFile() {
+    // DIALOGO
+    let dialogFile = await dialog.showOpenDialog({
+        defaultPath: file.path
+    })
+    // VERIFICAR CANCELAMENTO
+    if (dialogFile.canceled) return false
+
+    // ABRIR O ARQUIVO
+    file = {
+        name: path.basename(dialogFile.filePaths[0]),
+        content: readFile(dialogFile.filePaths[0]),
+        saved: true,
+        path: dialogFile.filePaths[0]
+    }
+    mainWindow.webContents.send('set-file', file)
+}
+
 // TEMPLATE MENU
 const templateMenu = [
     {
@@ -84,10 +125,16 @@ const templateMenu = [
                 }
             },
             {
-                label: 'Abirir'
+                label: 'Abirir',
+                click() {
+                    openFile()
+                }
             },
             {
-                label: 'Salvar'
+                label: 'Salvar',
+                click() {
+                    saveFile()
+                }
             },
             {
                 label: 'Salvar como',
