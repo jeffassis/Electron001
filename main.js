@@ -120,24 +120,28 @@ const templateMenu = [
         submenu: [
             {
                 label: 'Novo',
+                accelerator: 'CmdOrCtrl+N',
                 click() {
                     createNewFile()
                 }
             },
             {
                 label: 'Abirir',
+                accelerator: 'CmdOrCtrl+O',
                 click() {
                     openFile()
                 }
             },
             {
                 label: 'Salvar',
+                accelerator: 'CmdOrCtrl+S',
                 click() {
                     saveFile()
                 }
             },
             {
                 label: 'Salvar como',
+                accelerator: 'CmdOrCtrl+Shift+S',
                 click() {
                     saveFileAs()
                 }
