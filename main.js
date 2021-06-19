@@ -1,4 +1,6 @@
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron')
+const fs = require('fs')
+const path = require('path')
 
 //JANELA PRINCIPAL
 var mainWindow = null
@@ -16,6 +18,10 @@ async function createWindow() {
 
     // mainWindow.webContents.openDevTools()
     createNewFile()
+
+    ipcMain.on('update-content', function (event, data) {
+        file.content = data
+    })
 }
 
 // ARQUIVO
@@ -31,6 +37,39 @@ function createNewFile() {
     }
 
     mainWindow.webContents.send('set-file', file)
+}
+
+// SALVA ARQUIVO NO DISCO
+function writeFile(filePath) {
+    try {
+        fs.writeFile(filePath, file.content, function (error) {
+            // ERRO
+            if (error) throw error
+            // ARQUIVO SALVO
+            file.path = filePath
+            file.saved = true
+            file.name = path.basename(filePath)
+
+            mainWindow.webContents.send('set-file', file)
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+// SALVAR COMO 
+async function saveFileAs() {
+    // DIALOG 
+    let dialogFile = await dialog.showSaveDialog({
+        defaultPath: file.path
+    })
+    // VERIFICAR CANCELAMENTO
+    if (dialogFile.canceled) {
+        return false
+    }
+
+    // SALVAR ARQUIVO
+    writeFile(dialogFile.filePath)
 }
 
 // TEMPLATE MENU
@@ -51,7 +90,10 @@ const templateMenu = [
                 label: 'Salvar'
             },
             {
-                label: 'Salvar como'
+                label: 'Salvar como',
+                click() {
+                    saveFileAs()
+                }
             },
             {
                 label: 'Fechar',

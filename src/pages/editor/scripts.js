@@ -9,3 +9,8 @@ ipcRenderer.on('set-file', function (event, data) {
     textarea.value = data.content
     title.innerHTML = data.name + ' | JEFF EDITOR'
 })
+
+// UPDATE TEXTAREA
+function hadleChangeText() {
+    ipcRenderer.send('update-content', textarea.value)
+}
