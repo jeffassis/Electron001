@@ -5,10 +5,32 @@ var mainWindow = null
 async function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800,
-        height: 600
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
     })
     // CHAMADA DO HTML
     await mainWindow.loadFile('src/pages/editor/index.html')
+
+    // mainWindow.webContents.openDevTools()
+    createNewFile()
+}
+
+// ARQUIVO
+var file = {}
+
+// CRIAR NOVO ARQUIVO
+function createNewFile() {
+    file = {
+        name: 'novo-arquivo.txt',
+        content: '',
+        saved: false,
+        path: app.getPath('documents') + '/novo-arquivo.txt'
+    }
+
+    mainWindow.webContents.send('set-file', file)
 }
 
 // TEMPLATE MENU
@@ -17,7 +39,10 @@ const templateMenu = [
         label: 'Arquivo',
         submenu: [
             {
-                label: 'Novo'
+                label: 'Novo',
+                click() {
+                    createNewFile()
+                }
             },
             {
                 label: 'Abirir'
