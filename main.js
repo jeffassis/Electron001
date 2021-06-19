@@ -151,6 +151,42 @@ const templateMenu = [
                 role: process.platform === 'darwin' ? 'quit' : 'close'
             }
         ]
+    },
+    {
+        label: 'Editar',
+        submenu: [
+            {
+                label: 'Desfazer',
+                role: 'undo'
+            },
+            {
+                label: 'Refazer',
+                role: 'redo'
+            },
+            {
+                type: 'separator'
+            },
+            {
+                label: 'Copiar',
+                role: 'copy'
+            },
+            {
+                label: 'Colar',
+                role: 'paste'
+            },
+            {
+                label: 'Recortar',
+                role: 'cut'
+            }
+        ]
+    },
+    {
+        label: 'Ajuda',
+        submenu: [
+            {
+                label: 'Entre em Contanto com: Jeff Assis!!!'
+            }
+        ]
     }
 ]
 
